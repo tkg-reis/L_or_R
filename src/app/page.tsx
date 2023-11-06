@@ -1,113 +1,191 @@
-import Image from 'next/image'
+"use client";
+
+import Collect from "../../audio/collect.mp3"
+import Correct from "../../audio/correct.mp3"
+
+import Alive from "../../audio/alive.mp3"
+import Arrive from "../../audio/arrive.mp3"
+
+import Light from "../../audio/light.mp3"
+import Right from "../../audio/right.mp3"
+
+import Grass from "../../audio/grass.mp3"
+import Glass from "../../audio/glass.mp3"
+
+import Fry from "../../audio/fry.mp3"
+import Fly from "../../audio/fly.mp3"
+import Link from "next/link";
+import { useState } from "react";
+
 
 export default function Home() {
+
+  // 音源の数
+  // 1がcollect/correct 
+  // 2がalive/arrive 
+  // 3がlight/right
+  // 4がgrass/glass
+  // 5がfry/fly
+  const numberArray: number[] = [1, 2, 3, 4, 5];
+  // => useStateで代替できるかも。
+  const stringArray : (string | undefined)[] = ["collect", "alive", "light", "glass", "fly"];
+  const [targetString, setTargetString] = useState<string[]>(["collect", "alive", "light", "glass", "fly"]);
+  const [outputStringL, setOutputStringL] = useState();
+  const [outputStringR, setOutputStringR] = useState();
+  const [resultString, setResultString] = useState<string | null>("");
+  const [start, setStart] = useState<boolean>(false); 
+  // こちらもuseStateで代替可能かも。
+
+  // 音源をランダムに出力するために、不作為数値の設定。
+  function getRandomNumber(min: number, max: number) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+  // *2 リファクタリング候補
+  function getOutputMusicNumber(min: number, max: number) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+  // 音を出す
+  const PlayAudio = () => {
+    // stringArrayの値をランダムに選ぶためのランダム関数
+    const randomNumber = getRandomNumber(1, 5);
+    // 出力する音声をランダムに決めるためのランダム関数。上記を併用すると、一定の音声しか出力されないため追加
+    const outputMusicNumber = getOutputMusicNumber(1,5);
+    setStart(true);
+    
+    const selectedWord = (wordL: string, wordR: string ) => {
+      let selecteingWordL = wordL;
+      let selecteingWordR = wordR;
+      const Index = stringArray.indexOf(wordL);
+      if (Index !== -1) setTargetString(stringArray[Index]);
+      setOutputStringL(selecteingWordL);
+      setOutputStringR(selecteingWordR);
+    };
+    // sound test
+    // let audio = new Audio(randomNumber % 2 === 0 ? Collect : Correct);
+    // return audio.play();
+
+    if(randomNumber === numberArray[0]){
+        // ＊1リファクタリング候補
+        let audio = new Audio(outputMusicNumber % 2 === 0 ? Collect : Correct);
+        // 
+        if(outputMusicNumber % 2 === 0 ) {
+          setResultString("collect");
+        } else {
+          setResultString("correct");
+        }
+        
+        audio.play();
+        let endAudio = audio.ended;
+          if(!endAudio) return selectedWord("collect", "correct");
+    }
+
+    if(randomNumber === numberArray[1]) {
+      let audio = new Audio(outputMusicNumber % 2 === 0 ? Alive : Arrive);
+      
+      if(outputMusicNumber % 2 === 0 ) {
+        setResultString("alive");
+      } else {
+        setResultString("arrive");
+      }
+
+      audio.play();
+      let endAudio = audio.ended;
+        if(!endAudio) return selectedWord("alive", "arrive");
+    }
+
+    if(randomNumber === numberArray[2]) {
+      let audio = new Audio(outputMusicNumber % 2 === 0 ? Light : Right);
+      
+      if(outputMusicNumber % 2 === 0 ) {
+          setResultString("light");
+        } else {
+          setResultString("right");
+        }
+      audio.play();
+      let endAudio = audio.ended;
+        if(!endAudio) return selectedWord("light", "right" );
+    }
+
+    if(randomNumber === numberArray[3]) {
+      let audio = new Audio(randomNumber % 2 === 0 ? Glass : Grass);
+      
+      if(outputMusicNumber % 2 === 0 ) {
+        setResultString("glass");
+      } else {
+        setResultString("grass");
+      }
+
+      audio.play();
+      let endAudio = audio.ended;
+        if(!endAudio) return selectedWord("glass", "grass");
+    }
+
+    if(randomNumber === numberArray[4]) {
+      let audio = new Audio(randomNumber % 2 === 0 ? Fly : Fry);
+      
+      if(outputMusicNumber % 2 === 0 ) {
+          setResultString("fly");
+        } else {
+          setResultString("fry");
+        }
+
+      audio.play();
+      let endAudio = audio.ended;
+        if(!endAudio) return selectedWord("fly", "fry");
+    }
+  }
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">src/app/page.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+    <>
+      <header>
+        <ul className="flex items-center justify-center gap-5">
+          <li className="p-3">
+            <Link href={"/"}>
+              Home
+            </Link>
+          </li>
+          <li className="p-3">
+            <Link href={"/about"}>
+              About
+            </Link>
+          </li>
+          <li className="p-3">
+            <Link href={"/opinion"}>
+              Opinion
+            </Link>
+          </li>
+        </ul>
+      </header>
+      <main>
+        <div className="mx-auto my-10 w-11/12">
+          <h1 className="text-center text-2xl">LかRか</h1>
+          <h2 className="text-center text-lg mt-4">こちらの音は「L」それとも「R」？？？</h2>
+          <div className="text-center ">
+            <button className="my-6 bg-slate-500 rounded-lg p-4" onClick={PlayAudio}>Push Here To Listen!!!</button>
+          </div>
+          <div className="text-center ">
+            <span className="bg-indigo-600 inline-block rounded-lg p-10 text-white">{!start ? "Get Started!!!" : targetString }</span>
+          </div>
+          <div className="flex gap-5 items-center justify-center ">
+            <span className="inline-block m-5 p-4 rounded-md">
+              {outputStringL ? outputStringL : ""}
+            </span>
+            <span className="inline-block m-5 p-4 rounded-md">
+              {outputStringR ? outputStringR : ""}
+            </span>
+          </div>
+          <div className="text-center">
+            <span>{!start ? "" : `答えは${resultString}でした！`}</span>
+          </div>
         </div>
-      </div>
-
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px] z-[-1]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Explore the Next.js 13 playground.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
+      </main>
+      <footer>
+        <div className="text-center">
+          <p>&copy;tkg-reis.app</p>
+        </div>
+      </footer>
+    </>
   )
 }

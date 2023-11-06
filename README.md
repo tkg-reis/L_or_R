@@ -1,36 +1,36 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# "23.11.4"
 
-## Getting Started
+## Next.jsのv14での、dev環境構築について
 
-First, run the development server:
+<p>問題：既存のNode.jsのバージョンが以前のlts版になっていると、dev環境が動作しなくなっている。</p>
+<p>解決：nvm若しくはVoltaなどのバージョン切り替えが可能になるアプリケーションソフトウェアを導入して、バージョンを切り替える必要がある。その際に、vscodeのターミナルだとVoltaのバージョン反映が成されていなかったため、GitBashで変更を確実に確認してPCにバージョン切り替えを促す形となった。</p>
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+### ref
+<code>https://stackoverflow.com/questions/77383943/nextjs-referenceerror-request-is-not-defined-reading-old-version-of-node-s</code>
+<code>https://go-tech.blog/nodejs/volta-package-tool/#index_id6</code>
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<hr>
+<hr>
+<hr>
+<hr>
+<hr>
+<hr>
+<hr>
+<hr>
+<hr>
+<code></code>
+<code></code>
+<code></code>
+<code></code>
+<code></code>
+<code></code>
