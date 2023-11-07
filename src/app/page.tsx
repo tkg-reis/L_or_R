@@ -15,7 +15,7 @@ import Glass from "../../audio/glass.mp3"
 import Fry from "../../audio/fry.mp3"
 import Fly from "../../audio/fly.mp3"
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 
 export default function Home() {
@@ -33,7 +33,10 @@ export default function Home() {
   const [outputStringL, setOutputStringL] = useState();
   const [outputStringR, setOutputStringR] = useState();
   const [resultString, setResultString] = useState<string | null>("");
-  const [start, setStart] = useState<boolean>(false); 
+  const [isStart, isSetStart] = useState<boolean>(false);
+  const [isAnswer, isSetAnswer] = useState<boolean>(false);
+  let openTime = 2000;
+  let timeout = 5000;
   // こちらもuseStateで代替可能かも。
 
   // 音源をランダムに出力するために、不作為数値の設定。
@@ -52,9 +55,9 @@ export default function Home() {
     const randomNumber = getRandomNumber(1, 5);
     // 出力する音声をランダムに決めるためのランダム関数。上記を併用すると、一定の音声しか出力されないため追加
     const outputMusicNumber = getOutputMusicNumber(1,5);
-    setStart(true);
+    isSetStart(true);
     
-    const selectedWord = (wordL: string, wordR: string ) => {
+    const selectedWord = (wordL?: (string | undefined), wordR?: string ) => {
       let selecteingWordL = wordL;
       let selecteingWordR = wordR;
       const Index = stringArray.indexOf(wordL);
@@ -78,6 +81,7 @@ export default function Home() {
         
         audio.play();
         let endAudio = audio.ended;
+          // *3 リファクタリング候補
           if(!endAudio) return selectedWord("collect", "correct");
     }
 
@@ -136,6 +140,27 @@ export default function Home() {
         if(!endAudio) return selectedWord("fly", "fry");
     }
   }
+  // playAudioの副作用で対象のoutputStringを出力する。
+  useEffect(() => {
+    let timeOutId = setTimeout(() => {
+      isSetStart(true);
+    }, timeout);
+    
+    return () => {
+      clearTimeout(timeOutId);
+    }
+  }, [targetString]);
+
+  useEffect(() => {
+    let openAnswer = setTimeout(() => {
+        isSetAnswer(!true);
+    }, openTime);
+
+    return () => {
+      isSetAnswer(true)
+    }
+  }, [targetString])
+
 
   return (
     <>
@@ -166,18 +191,16 @@ export default function Home() {
             <button className="my-6 bg-slate-500 rounded-lg p-4" onClick={PlayAudio}>Push Here To Listen!!!</button>
           </div>
           <div className="text-center ">
-            <span className="bg-indigo-600 inline-block rounded-lg p-10 text-white">{!start ? "Get Started!!!" : targetString }</span>
+            <p className="p-1">{!isStart ? "Get Started!!!" : "Listen to Music"}</p>
+            <span className=" inline-block rounded-lg p-5 ">{!isStart ?  "" : `${outputStringL === undefined ? "" : outputStringL}  ${outputStringR=== undefined ? "" : outputStringR}` }</span>
           </div>
-          <div className="flex gap-5 items-center justify-center ">
-            <span className="inline-block m-5 p-4 rounded-md">
-              {outputStringL ? outputStringL : ""}
-            </span>
-            <span className="inline-block m-5 p-4 rounded-md">
-              {outputStringR ? outputStringR : ""}
-            </span>
-          </div>
-          <div className="text-center">
-            <span>{!start ? "" : `答えは${resultString}でした！`}</span>
+          {/* pixaybayAPIで画像の追加処理 */}
+          <div className="text-center flex justify-center items-center flex-col">
+            <div className="max-h-14 max-w-md">
+              <img src="" alt="LかRかの画像です" />
+            </div>
+            <p></p>
+            <span>{isAnswer ? "" : resultString }</span>
           </div>
         </div>
       </main>
