@@ -28,10 +28,10 @@ export default function Home() {
   // 5がfry/fly
   const numberArray: number[] = [1, 2, 3, 4, 5];
   // => useStateで代替できるかも。
-  const stringArray : (string | undefined)[] = ["collect", "alive", "light", "glass", "fly"];
+  const stringArray : any[] = ["collect", "alive", "light", "glass", "fly"];
   const [targetString, setTargetString] = useState<string[]>(["collect", "alive", "light", "glass", "fly"]);
-  const [outputStringL, setOutputStringL] = useState();
-  const [outputStringR, setOutputStringR] = useState();
+  const [outputStringL, setOutputStringL] = useState<undefined | string>();
+  const [outputStringR, setOutputStringR] = useState<undefined | string>();
   const [resultString, setResultString] = useState<string | null>("");
   const [isStart, isSetStart] = useState<boolean>(false);
   const [isAnswer, isSetAnswer] = useState<boolean>(false);
@@ -61,8 +61,11 @@ export default function Home() {
       let selecteingWordL = wordL;
       let selecteingWordR = wordR;
       const Index = stringArray.indexOf(wordL);
+      // !!!!!!1
       if (Index !== -1) setTargetString(stringArray[Index]);
+      // !!!!!!2
       setOutputStringL(selecteingWordL);
+      // !!!!!!3
       setOutputStringR(selecteingWordR);
     };
     // sound test
