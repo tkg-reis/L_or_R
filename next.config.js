@@ -12,7 +12,7 @@ const nextConfig = {
             },
         });
         return config;
-    },
+    }
     // publicRuntimeConfig: {
     //     PIXABAY_API_KEY: process.env.PIXABAY_API_KEY | undefined
     // },

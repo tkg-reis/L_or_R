@@ -9,26 +9,40 @@
 <code>https://stackoverflow.com/questions/77383943/nextjs-referenceerror-request-is-not-defined-reading-old-version-of-node-s</code>
 <code>https://go-tech.blog/nodejs/volta-package-tool/#index_id6</code>
 
+# "23.11.21"
 
+## Next.jsでの外部webAPIの呼び出し方について
 
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<hr>
-<hr>
-<hr>
-<hr>
-<hr>
-<hr>
-<hr>
-<hr>
-<hr>
+<p></p>
+
+### ref
+
 <code></code>
+
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<hr>
+<hr>
+<hr>
+<hr>
+<hr>
+<hr>
+<hr>
+<hr>
+<hr>
 <code></code>
 <code></code>
 <code></code>

@@ -14,40 +14,40 @@ import Glass from "../../audio/glass.mp3"
 
 import Fry from "../../audio/fry.mp3"
 import Fly from "../../audio/fly.mp3"
-import header from "./components/Header";
 import axios from "axios";
-import getConfig from "next/config";
-// import env from "dotenv";
-// env.config();
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import env from "dotenv";
+env.config();
 
 
 export default function Home() {
-
+  
   // 音源の数
   // 1がcollect/correct 
   // 2がalive/arrive 
   // 3がlight/right
   // 4がgrass/glass
   // 5がfry/fly
+  // =>mongoDBでデータベース化して、ハードコードを無くして、データベース管理にする。
+  
   const numberArray: number[] = [1, 2, 3, 4, 5];
   // => useStateで代替できるかも。
   const stringArray : any[] = ["collect", "alive", "light", "glass", "fly"];
   const [targetString, setTargetString] = useState<string[]>(["collect", "alive", "light", "glass", "fly"]);
   const [outputStringL, setOutputStringL] = useState<undefined | string>();
   const [outputStringR, setOutputStringR] = useState<undefined | string>();
+  const [error,setError] = useState<undefined | string>();
   const [resultString, setResultString] = useState<string | null>("");
+  // 出題数のカウントの状態管理
+  const [currentCount, setCurrentCount] = useState<number>(0);
   const [isStart, isSetStart] = useState<boolean>(false);
   const [isAnswer, isSetAnswer] = useState<boolean>(false);
-  // const [imgData, setImgData] = useState<string | undefined>();
+  const [imgData, setImgData] = useState<string>();
+  // 解答時間と解答表示時間
   let openTime = 5000;
   let timeout = 5000;
-
-  // const { publicRuntimeConfig } = getConfig();
-  // const apiKey = publicRuntimeConfig.PIXABAY_API_KEY;
   // こちらもuseStateで代替可能かも。
 
   // 音源をランダムに出力するために、不作為数値の設定。
@@ -62,15 +62,18 @@ export default function Home() {
   // const outputPhotoNumber = getRandomNumber(0, 19); 
   // 音を出す
   const PlayAudio = () => {
+    
     // stringArrayの値をランダムに選ぶためのランダム関数
     const randomNumber = getRandomNumber(1, 5);
     // 出力する音声をランダムに決めるためのランダム関数。上記を併用すると、一定の音声しか出力されないため追加
     const outputMusicNumber = getOutputMusicNumber(1,5);
     isSetStart(true);
+    setCurrentCount(prev   => prev + 1);
     
     const selectedWord = (wordL?: (string | undefined), wordR?: string ) => {
       let selecteingWordL = wordL;
       let selecteingWordR = wordR;
+      
       const Index = stringArray.indexOf(wordL);
       // !!!!!1any型の変更
       if (Index !== -1) setTargetString(stringArray[Index]);
@@ -175,14 +178,22 @@ export default function Home() {
   }, [targetString])
 
   // 写真データを取ってくる。
-  // useEffect(() => {
+  useEffect(() => {
     
-  //   axios.get(`https://pixabay.com/api/?key=${apiKey}&q=${resultString}`).then(res => {
-  //     console.log(res.data);
-  //     // setImgData(res.data.hits[outputPhotoNumber]);
-  //   });
-    
-  // }, [targetString]);
+    const getJson = async() : Promise<any> => {
+
+      try {
+        const url = `https://pixabay.com/api/?key=${process.env.NEXT_PUBLIC_PIXABAY_API_KEY}&q=${resultString}`;
+        const res = await axios.get(url);
+        
+        setImgData(res.data.hits[getRandomNumber(1,20)].largeImageURL);
+        
+      } catch (error) {
+        setError("error: push again!!")
+      }
+    }
+    getJson();
+  }, [targetString]);
   return (
     <>
       <Header/>
@@ -191,19 +202,28 @@ export default function Home() {
           <h1 className="text-center text-2xl">LかRか</h1>
           <h2 className="text-center text-lg mt-4">こちらの音は「L」それとも「R」？？？</h2>
           <div className="text-center ">
-            <button className="my-6 bg-slate-500 rounded-lg p-4 hover:text-black" onClick={PlayAudio}>Push Here To Listen!!!</button>
+            <button className="my-6 bg-lime-600	 rounded-lg p-4 hover:text-black" onClick={PlayAudio}>Push Here To Listen!!!</button>
           </div>
           <div className="text-center ">
-            <p className="p-1">{!isStart ? "Get Started!!!" : "Listen to Music!!!!"}</p>
-            <span className=" inline-block rounded-lg p-5 text-xl">{!isStart ?  "" : `${outputStringL === undefined ? "Lか" : outputStringL}  ${outputStringR=== undefined ? "Rか" : outputStringR}` }</span>
+            <p className="p-1 text-lg">{!isStart ? "Get Started!!!" : "This sound is..."}</p>
+            <span className=" inline-block rounded-lg p-5 text-2xl">{!isStart ?  "" : `${outputStringL === undefined ? "Lか" : outputStringL + "?"}  ${outputStringR=== undefined ? "Rか" : outputStringR + "?"}` }</span>
           </div>
-          {/* pixaybayAPIで画像の追加処理 */}
-          <div className="text-center flex justify-center items-center flex-col">
-            {/* <div className="max-h-14 max-w-md">
-              <img src="" alt="LかRかの画像です" />
-            </div> */}
-            <p></p>
-            <span className="text-lg underline">{isAnswer ? "" : resultString }</span>
+          <div className="text-center flex justify-center items-center flex-col p-4">
+            <p>{isAnswer ? "" : "Answer is ..."}</p>
+            <span className="underline text-sky-300	 text-3xl">{isAnswer ? "" : resultString }</span>
+          </div>
+            <div className=" flex justify-center items-center">
+              {isAnswer ? "" : (
+                <div className="max-h-12 max-w-xs p-4">
+                <img src={imgData ? imgData : error}  className=""/>
+              </div>
+              )}
+            </div>
+          <div className="text-center">
+            <span>
+              出題数：
+            </span>
+            {currentCount}
           </div>
         </div>
       </main>
