@@ -17,20 +17,25 @@
 
 ### ref
 
+<code>https://qiita.com/Sicut_study/items/f85314f34ec7c247b938</code>
+<code>https://fwywd.com/tech/next-env</code>
 <code></code>
+
+## tailwindcssで動的に背景画像を変える。
+
+<p>結論：tailwindは動的処理にむいていない。なぜなら設定に多くのコストをさかなければならないため。</p>
+
+<code>https://qiita.com/shadowTanaka/items/00b4bdc51151f9166a4a</code>
+
+## 正解数の表示
+
+## 単語達のデータベース化
+
+## コンストラクタの定義でplayAudio関数をリファクタリングする
 
 <p></p>
 <p></p>
 <p></p>
-<p></p>
-<p></p>
-<p></p>
-<p></p>
-<br>
-<br>
-<br>
-<br>
-<br>
 <br>
 <br>
 <br>
@@ -39,11 +44,6 @@
 <hr>
 <hr>
 <hr>
-<hr>
-<hr>
-<hr>
-<hr>
-<code></code>
 <code></code>
 <code></code>
 <code></code>

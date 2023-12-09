@@ -14,6 +14,9 @@ import Glass from "../../audio/glass.mp3"
 
 import Fry from "../../audio/fry.mp3"
 import Fly from "../../audio/fly.mp3"
+
+import CollectSound from "../../audio/collectSound.mp3";
+import WrongSound from "../../audio/wrongSound.mp3";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Header from "./components/Header";
@@ -38,13 +41,15 @@ export default function Home() {
   const [targetString, setTargetString] = useState<string[]>(["collect", "alive", "light", "glass", "fly"]);
   const [outputStringL, setOutputStringL] = useState<undefined | string>();
   const [outputStringR, setOutputStringR] = useState<undefined | string>();
-  const [error,setError] = useState<undefined | string>();
+  const [error,setError] = useState<undefined | string>("");
   const [resultString, setResultString] = useState<string | null>("");
   // 出題数のカウントの状態管理
   const [currentCount, setCurrentCount] = useState<number>(0);
   const [isStart, isSetStart] = useState<boolean>(false);
   const [isAnswer, isSetAnswer] = useState<boolean>(false);
   const [imgData, setImgData] = useState<string>();
+  const L = "Lか";
+  const R = "Rか";
   // 解答時間と解答表示時間
   let openTime = 5000;
   let timeout = 5000;
@@ -156,6 +161,18 @@ export default function Home() {
         if(!endAudio) return selectedWord("fly", "fry");
     }
   }
+
+  // ボタンの追加と正誤処理
+  // const clickHandler = () => {
+  //   if(resultString === outputStringL && resultString !== outputStringR) {
+  //     let audio = new Audio(CollectSound);
+  //     audio.play();
+  //   } else {
+  //     let audio = new Audio(WrongSound);
+  //     audio.play();
+  //   }
+  // }
+  
   // playAudioの副作用で対象のoutputStringを出力する。
   useEffect(() => {
     let timeOutId = setTimeout(() => {
@@ -198,6 +215,7 @@ export default function Home() {
     <>
       <Header/>
       <main>
+        
         <div className="mx-auto my-7 w-11/12">
           <h1 className="text-center text-2xl">LかRか</h1>
           <h2 className="text-center text-lg mt-4">こちらの音は「L」それとも「R」？？？</h2>
@@ -206,7 +224,14 @@ export default function Home() {
           </div>
           <div className="text-center ">
             <p className="p-1 text-lg">{!isStart ? "Get Started!!!" : "This sound is..."}</p>
-            <span className=" inline-block rounded-lg p-5 text-2xl">{!isStart ?  "" : `${outputStringL === undefined ? "Lか" : outputStringL + "?"}  ${outputStringR=== undefined ? "Rか" : outputStringR + "?"}` }</span>
+            <div className="rounded-lg p-5 text-2xl flex max-w-md m-auto gap-3">
+              <button className="p-4 m-4 rounded-lg border border-white w-40">
+                {!isStart ? L : `${outputStringL === undefined ? L : outputStringL  }`}
+              </button>
+              <button className="p-4 m-4 rounded-lg border border-white w-40">
+                {!isStart ? R : `${outputStringR === undefined ? R : outputStringR}`}
+              </button>
+            </div>
           </div>
           <div className="text-center flex justify-center items-center flex-col p-4">
             <p>{isAnswer ? "" : "Answer is ..."}</p>
